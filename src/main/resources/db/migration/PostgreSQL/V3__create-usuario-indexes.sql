@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX usuario_login_email_key ON usuario(login, email)
