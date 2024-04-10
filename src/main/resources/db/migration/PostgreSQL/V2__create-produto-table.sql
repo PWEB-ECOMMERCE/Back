@@ -1,0 +1,8 @@
+CREATE TABLE produto(
+    id INTEGER NOT NULL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    preco INTEGER NOT NULL,
+    imagem_url VARCHAR(255) NOT NULL,
+    quantidade INTEGER NOT NULL
+)
