@@ -119,7 +119,7 @@ public class UsuarioService {
         novoUsuario.setEmail(newUserData.email());
         novoUsuario.setEndereco(newUserData.endereco());
         novoUsuario.setLogin(newUserData.login());
-        novoUsuario.setSenha(Bcrypt.hashpw(newUserData.senha(),BCrypt.gensalt()));
+        novoUsuario.setSenha(BCrypt.hashpw(newUserData.senha(),BCrypt.gensalt()));
         novoUsuario.setAdministrador(false);
 
         this.usuarioRepository.save(novoUsuario);
