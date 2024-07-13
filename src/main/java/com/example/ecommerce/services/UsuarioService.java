@@ -11,7 +11,7 @@ import com.example.ecommerce.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.security.crypto.password.PasswordEncoder;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 import java.util.Optional;
@@ -119,8 +119,7 @@ public class UsuarioService {
         novoUsuario.setEmail(newUserData.email());
         novoUsuario.setEndereco(newUserData.endereco());
         novoUsuario.setLogin(newUserData.login());
-        // novoUsuario.setSenha(passwordEncoder.encode(newUserData.senha()));
-        novoUsuario.setSenha(newUserData.senha());
+        novoUsuario.setSenha(Bcrypt.hashpw(newUserData.senha(),BCrypt.gensalt()));
         novoUsuario.setAdministrador(false);
 
         this.usuarioRepository.save(novoUsuario);
@@ -131,15 +130,15 @@ public class UsuarioService {
     public UsuarioResponseDTO authenticateUsuario(String usuarioEmail,String senha){
         Usuario usuario = this.getUsuarioByEmail(usuarioEmail);
         if ( usuario != null ){
-          // if ( passwordEncoder.matches(senha,usuario.getSenha()) ){
-          //   UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
-          //           usuario.getId(),
-          //           usuario.getNome(),
-          //           usuario.getEndereco(),
-          //           usuario.getEmail()
-          //   );
-          //   return usuarioResponseDTO;
-          // }
+          if ( BCrypt.checkpw(senha,usuario.getSenha()) ){
+            UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
+                    usuario.getId(),
+                    usuario.getNome(),
+                    usuario.getEndereco(),
+                    usuario.getEmail()
+            );
+            return usuarioResponseDTO;
+          }
           UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
                   usuario.getId(),
                   usuario.getNome(),
