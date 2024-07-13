@@ -12,7 +12,7 @@ import com.example.ecommerce.dto.auth.LoginRequestDTO;
 import com.example.ecommerce.dto.usuario.UsuarioResponseDTO;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/login")
 @RequiredArgsConstructor
 public class AuthController {
 
