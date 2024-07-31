@@ -1,5 +1,6 @@
 package com.example.ecommerce.domain.produto;
 
+import com.example.ecommerce.domain.categoria.Categoria;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +30,8 @@ public class Produto {
 
     @Column(nullable = false)
     private int quantidade;
+
+    @ManyToOne
+    @JoinColumn(name = "cat_id")
+    private Categoria categoria;
 }

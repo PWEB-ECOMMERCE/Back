@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("produto")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+//Vide UsuarioController para mais info sobre a Annotation @CrossOrigin
+@RequestMapping("/produto")
 public class ProdutoController {
     @Autowired
     private ProdutoRepository repository;
