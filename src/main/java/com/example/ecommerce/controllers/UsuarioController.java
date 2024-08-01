@@ -5,6 +5,8 @@ import com.example.ecommerce.dto.usuario.UsuarioIdDTO;
 import com.example.ecommerce.dto.usuario.UsuarioRequestDTO;
 import com.example.ecommerce.dto.usuario.UsuarioResponseDTO;
 import com.example.ecommerce.services.UsuarioService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -51,8 +53,10 @@ public class UsuarioController {
     }
 
     @GetMapping("/{usuarioID}")
-    public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String usuarioID){
+    public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String usuarioID, HttpServletRequest request){
         UsuarioResponseDTO dadosUsuario = this.usuarioService.getDadosUsuario(usuarioID);
+        HttpSession session = request.getSession(false);
+        System.out.println(session.getAttribute("usuario"));
         return ResponseEntity.ok().body(dadosUsuario);
     }
 

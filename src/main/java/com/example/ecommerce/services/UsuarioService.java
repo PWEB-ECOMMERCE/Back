@@ -8,6 +8,7 @@ import com.example.ecommerce.dto.usuario.UsuarioIdDTO;
 import com.example.ecommerce.dto.usuario.UsuarioRequestDTO;
 import com.example.ecommerce.dto.usuario.UsuarioResponseDTO;
 import com.example.ecommerce.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,13 @@ public class UsuarioService {
         return usuario;
     }
 
+    private Usuario getUsuarioByLogin(String usuarioLogin){
+        Optional<Usuario> fetchedUsuario = this.usuarioRepository.findByLogin(usuarioLogin);
+        Usuario usuario = fetchedUsuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return usuario;
+    }
+
     public boolean validateUsuario(String login, String email){
         /*
         Dois usuários distintos não devem ter logins ou emails iguais, portanto devemos ter isso em mente ao considerar um usuario válido.
@@ -127,8 +135,10 @@ public class UsuarioService {
         return new UsuarioIdDTO(novoUsuario.getId());
     }
 
-    public UsuarioResponseDTO authenticateUsuario(String usuarioEmail,String senha){
-        Usuario usuario = this.getUsuarioByEmail(usuarioEmail);
+    public UsuarioResponseDTO authenticateUsuario(String usuarioLogin,String senha){
+        //Usuario usuario = this.getUsuarioByEmail(usuarioEmail);
+        //mudei de email para login
+        Usuario usuario = this.getUsuarioByLogin(usuarioLogin);
         if ( usuario != null ){
           if ( BCrypt.checkpw(senha,usuario.getSenha()) ){
             UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
@@ -137,6 +147,7 @@ public class UsuarioService {
                     usuario.getEndereco(),
                     usuario.getEmail()
             );
+
             return usuarioResponseDTO;
           }
           UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
