@@ -1,0 +1,7 @@
+CREATE TABLE venda(
+    id INTEGER NOT NULL PRIMARY KEY,
+    data_hora TIMESTAMP NOT NULL,
+    usuario_id VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE venda ADD CONSTRAINT FK_USUARIO_ID FOREIGN KEY (usuario_id) REFERENCES usuario (id);
