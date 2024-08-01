@@ -1,21 +1,23 @@
 package com.example.ecommerce.domain.categoria;
 
+import com.example.ecommerce.domain.produto.Produto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.io.Serializable;
+import java.util.List;
+
+@Table(name = "categoria")
 @Entity
-@Table(name="usuario")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Categoria {
+@EqualsAndHashCode(of = "id")
+public class Categoria implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cat_id;
+    private Integer id;
 
     @Column(nullable = false)
     private String descricao;

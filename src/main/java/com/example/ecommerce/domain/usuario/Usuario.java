@@ -1,7 +1,9 @@
 package com.example.ecommerce.domain.usuario;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -31,4 +33,5 @@ public class Usuario {
 
     @Column(nullable = false)
     private boolean administrador;
+
 }

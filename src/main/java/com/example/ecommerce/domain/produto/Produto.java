@@ -3,6 +3,7 @@ package com.example.ecommerce.domain.produto;
 import com.example.ecommerce.domain.categoria.Categoria;
 import jakarta.persistence.*;
 import lombok.*;
+import java.io.Serializable;
 
 @Table(name = "produto")
 @Entity(name = "produto")
@@ -11,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Produto {
+public class Produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -31,7 +32,4 @@ public class Produto {
     @Column(nullable = false)
     private int quantidade;
 
-    @ManyToOne
-    @JoinColumn(name = "cat_id")
-    private Categoria categoria;
 }
