@@ -22,11 +22,6 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @GetMapping
-    public String oi(){
-        return "io";
-    }
-
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest, HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -41,7 +36,13 @@ public class AuthController {
         }
 
     }
-
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        if (session != null) {
+            session.invalidate();
+        }
+    }
     // @PostMapping("/logout")
     // public ResponseEntity<?> logout() {
     //     // Implement logout logic, invalidate token or session
