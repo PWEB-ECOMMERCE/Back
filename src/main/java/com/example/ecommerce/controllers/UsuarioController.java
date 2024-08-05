@@ -56,7 +56,6 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String usuarioID, HttpServletRequest request){
         UsuarioResponseDTO dadosUsuario = this.usuarioService.getDadosUsuario(usuarioID);
         HttpSession session = request.getSession(false);
-        System.out.println(session.getAttribute("usuario"));
         return ResponseEntity.ok().body(dadosUsuario);
     }
 
