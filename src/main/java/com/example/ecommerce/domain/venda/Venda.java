@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.sql.Timestamp;
 
 @Table(name = "venda")
-@Entity
+@Entity(name = "venda")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -19,11 +19,12 @@ public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer venda_id;
+    private Integer id;
 
+    @Column(nullable = false)
     private Timestamp data_hora;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 }

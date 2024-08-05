@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name="usuario")
+@Entity(name="categoria")
+@Table(name="categoria")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,7 +15,7 @@ import lombok.Setter;
 public class Categoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cat_id;
+    private Integer id;
 
     @Column(nullable = false)
     private String descricao;
