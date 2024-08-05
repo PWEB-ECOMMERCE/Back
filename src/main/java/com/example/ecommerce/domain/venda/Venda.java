@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Table(name = "venda")
@@ -16,17 +15,15 @@ import java.sql.Timestamp;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Venda implements Serializable {
+public class Venda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column
+    private Integer venda_id;
+
     private Timestamp data_hora;
-    /*
+
     @ManyToOne
     @JoinColumn(name = "id")
     private Usuario usuario;
-
-     */
 }

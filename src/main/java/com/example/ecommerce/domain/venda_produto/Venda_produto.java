@@ -17,20 +17,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Venda_produto {
 
+    @ManyToOne
+    @JoinColumn(name = "venda_id")
+    private Venda venda;
 
-    //@ManyToOne
-    //@JoinColumn(name = "venda_id")
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    //private Venda venda;
-
-    //@ManyToOne
-    //@JoinColumn(name = "id")
-    //private Produto produto;
+    @ManyToOne
+    @JoinColumn(name = "id")
+    private Produto produto;
 
     @Column(nullable = false)
     private Integer quantidade;
-
-
 }
