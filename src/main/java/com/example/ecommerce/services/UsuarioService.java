@@ -8,8 +8,11 @@ import com.example.ecommerce.dto.usuario.UsuarioIdDTO;
 import com.example.ecommerce.dto.usuario.UsuarioRequestDTO;
 import com.example.ecommerce.dto.usuario.UsuarioResponseDTO;
 import com.example.ecommerce.repository.UsuarioRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +21,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+
+    // @Autowired
+    // private PasswordEncoder passwordEncoder;
 
 
     //TODO: mapeador de entity -> DTO
@@ -56,14 +62,30 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO getDadosUsuario(String usuarioID){
-        Usuario usuario = getUsuario(usuarioID);
+        Usuario usuario = getUsuarioByID(usuarioID);
         return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEndereco(), usuario.getEmail());
     }
-    private Usuario getUsuario(String usuarioID){
+
+    private Usuario getUsuarioByID(String usuarioID){
         Optional<Usuario> fetchedUsuario = this.usuarioRepository.findById(usuarioID);
 
         //Todo: criar classe de exceção para UserNotFoundException
         Usuario usuario = fetchedUsuario.orElseThrow( () -> new RuntimeException("Usuario não encontrado com ID " + usuarioID));
+
+        return usuario;
+    }
+
+    private Usuario getUsuarioByEmail(String usuarioEmail){
+        Optional<Usuario> fetchedUsuario = this.usuarioRepository.findByEmail(usuarioEmail);
+
+        Usuario usuario = fetchedUsuario.orElseThrow( () -> new RuntimeException("Usuario não encontrado"));
+
+        return usuario;
+    }
+
+    private Usuario getUsuarioByLogin(String usuarioLogin){
+        Optional<Usuario> fetchedUsuario = this.usuarioRepository.findByLogin(usuarioLogin);
+        Usuario usuario = fetchedUsuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         return usuario;
     }
@@ -105,7 +127,7 @@ public class UsuarioService {
         novoUsuario.setEmail(newUserData.email());
         novoUsuario.setEndereco(newUserData.endereco());
         novoUsuario.setLogin(newUserData.login());
-        novoUsuario.setSenha(newUserData.senha());
+        novoUsuario.setSenha(BCrypt.hashpw(newUserData.senha(),BCrypt.gensalt()));
         novoUsuario.setAdministrador(false);
 
         this.usuarioRepository.save(novoUsuario);
@@ -113,8 +135,34 @@ public class UsuarioService {
         return new UsuarioIdDTO(novoUsuario.getId());
     }
 
+    public UsuarioResponseDTO authenticateUsuario(String usuarioLogin,String senha){
+        //Usuario usuario = this.getUsuarioByEmail(usuarioEmail);
+        //mudei de email para login
+        Usuario usuario = this.getUsuarioByLogin(usuarioLogin);
+        if ( usuario != null ){
+          if ( BCrypt.checkpw(senha,usuario.getSenha()) ){
+            UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
+                    usuario.getId(),
+                    usuario.getNome(),
+                    usuario.getEndereco(),
+                    usuario.getEmail()
+            );
+
+            return usuarioResponseDTO;
+          }
+          UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
+                  usuario.getId(),
+                  usuario.getNome(),
+                  usuario.getEndereco(),
+                  usuario.getEmail()
+          );
+          return usuarioResponseDTO;
+        }
+        throw new RuntimeException("Dados incorretos!");
+    }
+
     public UsuarioResponseDTO deleteUsuario(String usuarioID){
-        Usuario usuario = this.getUsuario(usuarioID);
+        Usuario usuario = this.getUsuarioByID(usuarioID);
         UsuarioResponseDTO deletedUserDTO = new UsuarioResponseDTO(
                 usuario.getId(),
                 usuario.getNome(),
