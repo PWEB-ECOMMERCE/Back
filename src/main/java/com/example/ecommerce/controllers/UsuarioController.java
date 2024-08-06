@@ -40,25 +40,26 @@ Mais informações sobre CORS:
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> getAllUsuarios(){
         List<UsuarioResponseDTO> dadosBasicosUsuarios = this.usuarioService.getDadosBasicosUsuarios();
         return ResponseEntity.ok().body(dadosBasicosUsuarios);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/detailed")
     public ResponseEntity<List<DetalhesUsuario>> getAllDetailedUsuarios(){
         List<DetalhesUsuario> dadosDetalhados = this.usuarioService.getAllDetalhesUsuarios();
         return ResponseEntity.ok().body(dadosDetalhados);
     }
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String usuarioID, HttpServletRequest request){
         UsuarioResponseDTO dadosUsuario = this.usuarioService.getDadosUsuario(usuarioID);
         HttpSession session = request.getSession(false);
         return ResponseEntity.ok().body(dadosUsuario);
     }
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<UsuarioIdDTO> registerUsuario(@RequestBody UsuarioRequestDTO newUserData, UriComponentsBuilder uriComponentsBuilder){
         UsuarioIdDTO usuarioRegistradoID = this.usuarioService.registerUsuario(newUserData);
@@ -67,7 +68,7 @@ public class UsuarioController {
 
         return ResponseEntity.created(usuarioURI).body(usuarioRegistradoID);
     }
-
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> deleteUsuario(@PathVariable String usuarioID){
         UsuarioResponseDTO usuarioDeletado = this.usuarioService.deleteUsuario(usuarioID);
