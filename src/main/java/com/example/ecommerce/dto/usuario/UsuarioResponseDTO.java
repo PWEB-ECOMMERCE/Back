@@ -4,5 +4,7 @@ public record UsuarioResponseDTO(
         String id,
         String nome,
         String endereco,
-        String email
+        String email,
+        String username,
+        boolean admin
 ) { }

@@ -74,4 +74,12 @@ public class UsuarioController {
         UsuarioResponseDTO usuarioDeletado = this.usuarioService.deleteUsuario(usuarioID);
         return ResponseEntity.ok().body(usuarioDeletado);
     }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PatchMapping("/{usuarioID}")
+    public ResponseEntity<UsuarioResponseDTO> updateUsuario(
+            @PathVariable("usuarioID") String usuarioID,
+            @RequestBody UsuarioRequestDTO updatedUser) {
+        UsuarioResponseDTO usuario = usuarioService.updateUsuario(usuarioID, updatedUser);
+        return ResponseEntity.ok(usuario);
+    }
 }
