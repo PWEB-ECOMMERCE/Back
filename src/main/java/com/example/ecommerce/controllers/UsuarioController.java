@@ -16,7 +16,6 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 /*
 A Annotation @CrossOrigin permite que essa rota seja acessada por serviços que rodem em uma
 porta/máquina distinta da utilizada pela API.
@@ -40,26 +39,22 @@ Mais informações sobre CORS:
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public ResponseEntity<List<UsuarioResponseDTO>> getAllUsuarios(){
         List<UsuarioResponseDTO> dadosBasicosUsuarios = this.usuarioService.getDadosBasicosUsuarios();
         return ResponseEntity.ok().body(dadosBasicosUsuarios);
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/detailed")
     public ResponseEntity<List<DetalhesUsuario>> getAllDetailedUsuarios(){
         List<DetalhesUsuario> dadosDetalhados = this.usuarioService.getAllDetalhesUsuarios();
         return ResponseEntity.ok().body(dadosDetalhados);
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/perfil/{usuarioID}")
+    @GetMapping("/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String usuarioID, HttpServletRequest request){
         UsuarioResponseDTO dadosUsuario = this.usuarioService.getDadosUsuario(usuarioID);
         HttpSession session = request.getSession(false);
         return ResponseEntity.ok().body(dadosUsuario);
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<UsuarioIdDTO> registerUsuario(@RequestBody UsuarioRequestDTO newUserData, UriComponentsBuilder uriComponentsBuilder){
         UsuarioIdDTO usuarioRegistradoID = this.usuarioService.registerUsuario(newUserData);
@@ -68,10 +63,16 @@ public class UsuarioController {
 
         return ResponseEntity.created(usuarioURI).body(usuarioRegistradoID);
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @DeleteMapping("/perfil/{usuarioID}")
+    @DeleteMapping("/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> deleteUsuario(@PathVariable String usuarioID){
         UsuarioResponseDTO usuarioDeletado = this.usuarioService.deleteUsuario(usuarioID);
         return ResponseEntity.ok().body(usuarioDeletado);
+    }
+    @PatchMapping("/{usuarioID}")
+    public ResponseEntity<UsuarioResponseDTO> updateUsuario(
+            @PathVariable("usuarioID") String usuarioID,
+            @RequestBody UsuarioRequestDTO updatedUser) {
+        UsuarioResponseDTO usuario = usuarioService.updateUsuario(usuarioID, updatedUser);
+        return ResponseEntity.ok(usuario);
     }
 }

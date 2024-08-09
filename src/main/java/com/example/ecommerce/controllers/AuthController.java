@@ -20,22 +20,19 @@ public class AuthController {
 
     @Autowired
     private UsuarioService usuarioService;
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest, HttpServletRequest request, HttpServletResponse response) {
         try {
-            System.out.println(loginRequest.username());
           UsuarioResponseDTO user = usuarioService.authenticateUsuario(loginRequest.username(), loginRequest.password());
           //aqui a sessao é criada e o id do usuario atribuido como valor do atributo "usuario" da sessão
           HttpSession session = request.getSession();
           session.setAttribute("usuario", user.id());
           return ResponseEntity.ok(user);
         } catch (Exception e) {
-          return ResponseEntity.status(401).body(e.toString());
+          return ResponseEntity.status(401).body(e.getMessage().toString());
         }
 
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/logout")
     public void logout(HttpServletRequest request){
         HttpSession session = request.getSession();

@@ -38,7 +38,9 @@ public class UsuarioService {
                     usuarioAtual.getId(),
                     usuarioAtual.getNome(),
                     usuarioAtual.getEndereco(),
-                    usuarioAtual.getEmail()
+                    usuarioAtual.getEmail(),
+                    usuarioAtual.getLogin(),
+                    usuarioAtual.isAdministrador()
             );
         }).toList();
 
@@ -63,7 +65,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO getDadosUsuario(String usuarioID){
         Usuario usuario = getUsuarioByID(usuarioID);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEndereco(), usuario.getEmail());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEndereco(), usuario.getEmail(), usuario.getLogin(), usuario.isAdministrador());
     }
 
     private Usuario getUsuarioByID(String usuarioID){
@@ -128,7 +130,7 @@ public class UsuarioService {
         novoUsuario.setEndereco(newUserData.endereco());
         novoUsuario.setLogin(newUserData.login());
         novoUsuario.setSenha(BCrypt.hashpw(newUserData.senha(),BCrypt.gensalt()));
-        novoUsuario.setAdministrador(false);
+        novoUsuario.setAdministrador(newUserData.admin());
 
         this.usuarioRepository.save(novoUsuario);
 
@@ -145,18 +147,12 @@ public class UsuarioService {
                     usuario.getId(),
                     usuario.getNome(),
                     usuario.getEndereco(),
-                    usuario.getEmail()
+                    usuario.getEmail(),
+                    usuario.getLogin(),
+                    usuario.isAdministrador()
             );
-
             return usuarioResponseDTO;
           }
-          UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(
-                  usuario.getId(),
-                  usuario.getNome(),
-                  usuario.getEndereco(),
-                  usuario.getEmail()
-          );
-          return usuarioResponseDTO;
         }
         throw new RuntimeException("Dados incorretos!");
     }
@@ -167,12 +163,45 @@ public class UsuarioService {
                 usuario.getId(),
                 usuario.getNome(),
                 usuario.getEndereco(),
-                usuario.getEmail()
+                usuario.getEmail(),
+                usuario.getLogin(),
+                usuario.isAdministrador()
         );
 
         this.usuarioRepository.delete(usuario);
 
         return deletedUserDTO;
+    }
+    public UsuarioResponseDTO updateUsuario(String usuarioID, UsuarioRequestDTO editted){
+        Usuario existingUsuario = usuarioRepository.findById(usuarioID)
+            .orElseThrow(() -> new RuntimeException("Usuario not found"));
+
+        if (editted.nome() != null) {
+            existingUsuario.setNome(editted.nome());
+        }
+
+        if (editted.email() != null) {
+            existingUsuario.setEmail(editted.email());
+        }
+        if (editted.endereco() != null) {
+            existingUsuario.setEndereco(editted.endereco());
+        }
+        if (editted.login() != null) {
+            existingUsuario.setLogin(editted.login());
+        }
+        if (editted.senha() != null && editted.senha().length() > 8) {
+            existingUsuario.setSenha(BCrypt.hashpw(editted.senha(),BCrypt.gensalt()));
+        }
+        Usuario user = usuarioRepository.save(existingUsuario);
+        return new UsuarioResponseDTO(
+            user.getId(),
+            user.getNome(),
+            user.getEndereco(),
+            user.getEmail(),
+            user.getLogin(),
+            user.isAdministrador()
+        );
+
     }
 
 }

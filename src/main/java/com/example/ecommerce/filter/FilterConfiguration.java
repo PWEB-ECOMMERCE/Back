@@ -1,6 +1,9 @@
 package com.example.ecommerce.filter;
 
 import com.example.ecommerce.controllers.UsuarioController;
+
+import java.util.List;
+
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
