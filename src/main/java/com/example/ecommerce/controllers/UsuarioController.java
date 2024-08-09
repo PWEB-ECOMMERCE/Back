@@ -49,7 +49,7 @@ public class UsuarioController {
         List<DetalhesUsuario> dadosDetalhados = this.usuarioService.getAllDetalhesUsuarios();
         return ResponseEntity.ok().body(dadosDetalhados);
     }
-    @GetMapping("/{usuarioID}")
+    @GetMapping("/esp/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> getUsuario(@PathVariable String usuarioID, HttpServletRequest request){
         UsuarioResponseDTO dadosUsuario = this.usuarioService.getDadosUsuario(usuarioID);
         HttpSession session = request.getSession(false);
@@ -63,12 +63,12 @@ public class UsuarioController {
 
         return ResponseEntity.created(usuarioURI).body(usuarioRegistradoID);
     }
-    @DeleteMapping("/{usuarioID}")
+    @DeleteMapping("/esp/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> deleteUsuario(@PathVariable String usuarioID){
         UsuarioResponseDTO usuarioDeletado = this.usuarioService.deleteUsuario(usuarioID);
         return ResponseEntity.ok().body(usuarioDeletado);
     }
-    @PatchMapping("/{usuarioID}")
+    @PatchMapping("/esp/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> updateUsuario(
             @PathVariable("usuarioID") String usuarioID,
             @RequestBody UsuarioRequestDTO updatedUser) {
