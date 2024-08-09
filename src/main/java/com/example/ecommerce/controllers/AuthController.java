@@ -20,7 +20,6 @@ public class AuthController {
 
     @Autowired
     private UsuarioService usuarioService;
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO loginRequest, HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -34,7 +33,6 @@ public class AuthController {
         }
 
     }
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/logout")
     public void logout(HttpServletRequest request){
         HttpSession session = request.getSession();
