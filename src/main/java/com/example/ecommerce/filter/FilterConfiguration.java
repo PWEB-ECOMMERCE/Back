@@ -17,7 +17,7 @@ public class FilterConfiguration {
 
         register.setFilter(new Filtro());
         //isso configura o filtro para que atue sobre a url abaixo, ou seja, /usuarios e todas as variações
-        register.addUrlPatterns("/usuarios/perfil/*");
+        register.addUrlPatterns("/usuarios/esp/*");
         return register;
     }
 }
