@@ -17,24 +17,6 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-/*
-A Annotation @CrossOrigin permite que essa rota seja acessada por serviços que rodem em uma
-porta/máquina distinta da utilizada pela API.
-
-Mais especificamente, atributo 'origins' dita que rotas serão permitidas a fazer essas requisições.
-O valor atual (30/07/2024) está "*", o que indica que qualquer requisição feita à API será permitida.
-Idealmente, também por questões de segurança, no lugar de "*" teríamos nosso próprio domínio com as
-rotas que desejamos permitir o acesso.
-
-Além disso, as configurações de CORS (Cross Origin Refs.) podem ser feitas globalmente, assim como os
-filtros de rota (mesmo conceito explicado pelo Prof. Léo na disciplina).
-
-Mais informações sobre CORS:
-
-    1. https://spring.io/guides/gs/rest-service-cors
-    2. https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-
-*/
 @RequestMapping("/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
@@ -56,6 +38,7 @@ public class UsuarioController {
         HttpSession session = request.getSession(false);
         return ResponseEntity.ok().body(dadosUsuario);
     }
+    /*
     @PostMapping
     public ResponseEntity<UsuarioIdDTO> registerUsuario(@RequestBody UsuarioRequestDTO newUserData, UriComponentsBuilder uriComponentsBuilder, HttpServletRequest request, HttpServletResponse response){
         UsuarioIdDTO usuarioRegistradoID = this.usuarioService.registerUsuario(newUserData);
@@ -65,6 +48,7 @@ public class UsuarioController {
 
         return ResponseEntity.created(usuarioURI).body(usuarioRegistradoID);
     }
+    */
     @DeleteMapping("/esp/{usuarioID}")
     public ResponseEntity<UsuarioResponseDTO> deleteUsuario(@PathVariable String usuarioID){
         UsuarioResponseDTO usuarioDeletado = this.usuarioService.deleteUsuario(usuarioID);

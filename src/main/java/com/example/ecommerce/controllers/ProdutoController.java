@@ -15,10 +15,17 @@ import java.util.List;
 public class ProdutoController {
     @Autowired
     private ProdutoRepository repository;
+
     @GetMapping
-    public List<ProdutoResponseDTO> getAll(){
-        List<ProdutoResponseDTO> listaProduto = repository.findAll().stream().map(ProdutoResponseDTO::new).toList();
-        return listaProduto;
+    public String getAll(){
+        //List<ProdutoResponseDTO> listaProduto = repository.findAll().stream().map(ProdutoResponseDTO::new).toList();
+        return "Oi tudo bem?";
+    }
+
+    @GetMapping("/bloca")
+    public String uia(){
+        //List<ProdutoResponseDTO> listaProduto = repository.findAll().stream().map(ProdutoResponseDTO::new).toList();
+        return "Entrou na rota bloqueada, MUHUAHUAHHahahahha";
     }
 
 //    //Deve ser movido pra classe de service dedicada
