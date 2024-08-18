@@ -1,5 +1,5 @@
 CREATE TABLE venda(
-    id INTEGER NOT NULL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     data_hora TIMESTAMP NOT NULL,
     usuario_id VARCHAR(255) NOT NULL
 );

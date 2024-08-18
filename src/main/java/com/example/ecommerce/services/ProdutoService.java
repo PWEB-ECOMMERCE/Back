@@ -13,12 +13,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
+    private  CategoriaService categoriaService;
 
     public ProdutoResponseDTO criarProdutoResponseDTo(Produto novoProduto) {
         ProdutoResponseDTO produtoResponseDTO = new ProdutoResponseDTO(
                 novoProduto.getId(),
                 novoProduto.getNome(),
-                novoProduto.getCategoria(),
+                 novoProduto.getCategoria().getId(),
                 novoProduto.getDescricao(),
                 novoProduto.getPreco(),
                 novoProduto.getImagemUrl(),
@@ -27,7 +28,7 @@ public class ProdutoService {
         return produtoResponseDTO;
     }
 
-    public ProdutoResponseDTO createProduct(ProdutoRequestDTO produtoRequestDTO) {
+    public ProdutoResponseDTO adicionaProduct(ProdutoRequestDTO produtoRequestDTO) {
         Produto novoProduto = new Produto();
                 novoProduto.setNome(produtoRequestDTO.nome());
                 novoProduto.setCategoria(produtoRequestDTO.categoria());
@@ -36,10 +37,10 @@ public class ProdutoService {
                 novoProduto.setImagemUrl(produtoRequestDTO.foto());
                 novoProduto.setQuantidade(produtoRequestDTO.quantidade());
 
-        this.produtoRepository.save(novoProduto);
+        Produto produto = this.produtoRepository.save(novoProduto);
 
 
-        return criarProdutoResponseDTo(novoProduto);
+        return criarProdutoResponseDTo(produto);
     }
 
     public ProdutoResponseDTO retornaProduto(int id){

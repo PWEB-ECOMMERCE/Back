@@ -140,8 +140,6 @@ public class UsuarioService {
          */
         String encryptedPassword = new BCryptPasswordEncoder().encode(newUserData.senha());
 
-
-        //O usuário é valido, portanto:
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNome(newUserData.nome());
         novoUsuario.setEmail(newUserData.email());

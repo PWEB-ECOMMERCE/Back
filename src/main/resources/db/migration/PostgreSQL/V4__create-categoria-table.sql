@@ -1,4 +1,4 @@
 CREATE TABLE categoria(
-    id INTEGER NOT NULL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     descricao VARCHAR(255) NOT NULL
 )

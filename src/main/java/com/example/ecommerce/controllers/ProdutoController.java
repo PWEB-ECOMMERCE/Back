@@ -19,8 +19,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
-    @Autowired
-    private ProdutoRepository produtoRepository;
+
+    private final ProdutoRepository produtoRepository;
 
     private final ProdutoService produtoService;
 
@@ -39,8 +39,8 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> createProduct(@RequestBody ProdutoRequestDTO produtoRequestDTO, UriComponentsBuilder uriComponentsBuilder){
-        ProdutoResponseDTO produtoResponseDTO = this.produtoService.createProduct(produtoRequestDTO);
-        URI produtoURI = uriComponentsBuilder.path("produtos/esp/{produtoID}").buildAndExpand(produtoResponseDTO).toUri();
+        ProdutoResponseDTO produtoResponseDTO = this.produtoService.adicionaProduct(produtoRequestDTO);
+        URI produtoURI = uriComponentsBuilder.path("produto/esp/{produtoID}").buildAndExpand(produtoResponseDTO).toUri();
 
         return ResponseEntity.created(produtoURI).body(produtoResponseDTO);
     }
