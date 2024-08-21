@@ -7,9 +7,11 @@ import com.example.ecommerce.dto.usuario.DetalhesUsuario;
 import com.example.ecommerce.dto.usuario.UsuarioIdDTO;
 import com.example.ecommerce.dto.usuario.UsuarioRequestDTO;
 import com.example.ecommerce.dto.usuario.UsuarioResponseDTO;
+import com.example.ecommerce.repository.CustomUserRepository;
 import com.example.ecommerce.repository.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.mindrot.jbcrypt.BCrypt;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
+    private final CustomUserRepository customUserRepository;
 
     // @Autowired
     // private PasswordEncoder passwordEncoder;
@@ -86,10 +89,17 @@ public class UsuarioService {
     }
 
     private Usuario getUsuarioByLogin(String usuarioLogin){
-        Optional<Usuario> fetchedUsuario = this.usuarioRepository.findByLogin(usuarioLogin);
-        Usuario usuario = fetchedUsuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
-        return usuario;
+        //Usuario usuario = fetchedUsuario.orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        try{
+            Usuario fetchedUsuario = this.customUserRepository.retornaUsuarioPorLogin(usuarioLogin);
+            return fetchedUsuario;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+
     }
 
     public boolean validateUsuario(String login, String email){
@@ -98,14 +108,16 @@ public class UsuarioService {
 
         Para diferenciar as 2 falhas em tempo de execução, serão usadas exceções específicas que podem ser tratadas nas rotinas seguintes
          */
+
         if (!validLogin(login) || !validEmail(email)){ //Em qualquer caso onde um seja inválido, o usuário é invalido
             return false;
         }
         return true;
     }
     private boolean validLogin(String usuarioLogin){
-        Optional<Usuario> fetchedUsuario = this.usuarioRepository.findByLogin(usuarioLogin);
-        if (fetchedUsuario.isPresent()){
+        //Optional<Usuario> fetchedUsuario = this.usuarioRepository.findByLogin(usuarioLogin);
+        Usuario fetchedUsuario = this.customUserRepository.retornaUsuarioPorLogin(usuarioLogin);
+        if (fetchedUsuario != null){
             throw new UserLoginAlreadyRegistered(usuarioLogin);
         }
         return true;
@@ -118,18 +130,22 @@ public class UsuarioService {
         return true;
     }
 
+
     public UsuarioIdDTO registerUsuario(UsuarioRequestDTO newUserData){
+        /*
         if (!validateUsuario(newUserData.login(), newUserData.email())){
             return new UsuarioIdDTO("");
         }
+        
+         */
+        String encryptedPassword = new BCryptPasswordEncoder().encode(newUserData.senha());
 
-        //O usuário é valido, portanto:
         Usuario novoUsuario = new Usuario();
         novoUsuario.setNome(newUserData.nome());
         novoUsuario.setEmail(newUserData.email());
         novoUsuario.setEndereco(newUserData.endereco());
         novoUsuario.setLogin(newUserData.login());
-        novoUsuario.setSenha(BCrypt.hashpw(newUserData.senha(),BCrypt.gensalt()));
+        novoUsuario.setSenha(encryptedPassword);
         novoUsuario.setAdministrador(newUserData.admin());
 
         this.usuarioRepository.save(novoUsuario);
@@ -156,6 +172,7 @@ public class UsuarioService {
         }
         throw new RuntimeException("Dados incorretos!");
     }
+
 
     public UsuarioResponseDTO deleteUsuario(String usuarioID){
         Usuario usuario = this.getUsuarioByID(usuarioID);
@@ -203,5 +220,4 @@ public class UsuarioService {
         );
 
     }
-
 }
