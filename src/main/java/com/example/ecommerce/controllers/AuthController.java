@@ -83,5 +83,12 @@ public class AuthController {
 
         return ResponseEntity.created(usuarioURI).body(usuarioRegistradoID);
     }
+    @GetMapping("/logout")
+    public void logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        if (session != null) {
+            session.invalidate();
+        }
+    }
 
 }
