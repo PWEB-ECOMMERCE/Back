@@ -1,5 +1,6 @@
 package com.example.ecommerce.services;
 
+import com.example.ecommerce.domain.categoria.Categoria;
 import com.example.ecommerce.domain.produto.Produto;
 import com.example.ecommerce.dto.produto.ProdutoRequestDTO;
 import com.example.ecommerce.dto.produto.ProdutoResponseDTO;
@@ -29,6 +30,7 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO adicionaProduct(ProdutoRequestDTO produtoRequestDTO) {
+
         Produto novoProduto = new Produto();
                 novoProduto.setNome(produtoRequestDTO.nome());
                 novoProduto.setCategoria(produtoRequestDTO.categoria());

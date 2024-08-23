@@ -28,8 +28,14 @@ public class CategoriaController {
     }
 
     @GetMapping("/esp/{categoriaID}")
-    public ResponseEntity<CategoriaResponseDTO> getCategoria(@PathVariable int produtoID) {
-        CategoriaResponseDTO categoriaResponseDTO = categoriaService.retornaCategoria(produtoID);
+    public ResponseEntity<CategoriaResponseDTO> getCategoria(@PathVariable int categoriaID) {
+        CategoriaResponseDTO categoriaResponseDTO = categoriaService.retornaCategoria(categoriaID);
+        return ResponseEntity.ok().body(categoriaResponseDTO);
+    }
+
+    @GetMapping("/esp/nome/{categoriaDescricao}")
+    public ResponseEntity<CategoriaResponseDTO> getCategoriaPorDescricao(@PathVariable String categoriaDescricao){
+        CategoriaResponseDTO categoriaResponseDTO = categoriaService.retornaCategoriaPorDescricao(categoriaDescricao);
         return ResponseEntity.ok().body(categoriaResponseDTO);
     }
 
