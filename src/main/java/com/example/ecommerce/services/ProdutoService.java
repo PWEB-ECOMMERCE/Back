@@ -19,7 +19,7 @@ public class ProdutoService {
         ProdutoResponseDTO produtoResponseDTO = new ProdutoResponseDTO(
                 novoProduto.getId(),
                 novoProduto.getNome(),
-                 novoProduto.getCategoria().getId(),
+                 novoProduto.getCategoria(),
                 novoProduto.getDescricao(),
                 novoProduto.getPreco(),
                 novoProduto.getImagemUrl(),
