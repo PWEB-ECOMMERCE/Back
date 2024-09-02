@@ -70,7 +70,8 @@ public class AuthController {
                 usuario.getEndereco(),
                 usuario.getEmail(),
                 usuario.getUsername(),
-                usuario.isAdministrador()
+                usuario.isAdministrador(),
+                usuario.getRole()
         );
         return ResponseEntity.ok(usuarioResponseDTO);
     }

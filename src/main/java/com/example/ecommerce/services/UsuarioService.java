@@ -1,5 +1,6 @@
 package com.example.ecommerce.services;
 
+import com.example.ecommerce.domain.usuario.UserRole;
 import com.example.ecommerce.domain.usuario.Usuario;
 import com.example.ecommerce.domain.usuario.exceptions.UserEmailAlreadyRegistered;
 import com.example.ecommerce.domain.usuario.exceptions.UserLoginAlreadyRegistered;
@@ -43,7 +44,8 @@ public class UsuarioService {
                     usuarioAtual.getEndereco(),
                     usuarioAtual.getEmail(),
                     usuarioAtual.getLogin(),
-                    usuarioAtual.isAdministrador()
+                    usuarioAtual.isAdministrador(),
+                    usuarioAtual.getRole()
             );
         }).toList();
 
@@ -68,7 +70,7 @@ public class UsuarioService {
 
     public UsuarioResponseDTO getDadosUsuario(String usuarioID){
         Usuario usuario = getUsuarioByID(usuarioID);
-        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEndereco(), usuario.getEmail(), usuario.getLogin(), usuario.isAdministrador());
+        return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEndereco(), usuario.getEmail(), usuario.getLogin(), usuario.isAdministrador(), usuario.getRole());
     }
 
     private Usuario getUsuarioByID(String usuarioID){
@@ -129,7 +131,14 @@ public class UsuarioService {
         }
         return true;
     }
-
+    public UserRole defineRole(Boolean checkAdmin){
+        UserRole role;
+        if(checkAdmin== true) {
+            return role = UserRole.ADMIN;
+        }else{
+            return role = UserRole.USER;
+        }
+    }
 
     public UsuarioIdDTO registerUsuario(UsuarioRequestDTO newUserData){
         /*
@@ -138,6 +147,7 @@ public class UsuarioService {
         }
         
          */
+
         String encryptedPassword = new BCryptPasswordEncoder().encode(newUserData.senha());
 
         Usuario novoUsuario = new Usuario();
@@ -147,6 +157,7 @@ public class UsuarioService {
         novoUsuario.setLogin(newUserData.login());
         novoUsuario.setSenha(encryptedPassword);
         novoUsuario.setAdministrador(newUserData.admin());
+        novoUsuario.setRole(defineRole(newUserData.admin()));
 
         this.usuarioRepository.save(novoUsuario);
 
@@ -165,7 +176,8 @@ public class UsuarioService {
                     usuario.getEndereco(),
                     usuario.getEmail(),
                     usuario.getLogin(),
-                    usuario.isAdministrador()
+                    usuario.isAdministrador(),
+                    usuario.getRole()
             );
             return usuarioResponseDTO;
           }
@@ -182,7 +194,8 @@ public class UsuarioService {
                 usuario.getEndereco(),
                 usuario.getEmail(),
                 usuario.getLogin(),
-                usuario.isAdministrador()
+                usuario.isAdministrador(),
+                usuario.getRole()
         );
 
         this.usuarioRepository.delete(usuario);
@@ -216,7 +229,8 @@ public class UsuarioService {
             user.getEndereco(),
             user.getEmail(),
             user.getLogin(),
-            user.isAdministrador()
+            user.isAdministrador(),
+                user.getRole()
         );
 
     }

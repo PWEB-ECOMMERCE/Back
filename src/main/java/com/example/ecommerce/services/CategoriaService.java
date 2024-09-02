@@ -33,6 +33,15 @@ public class CategoriaService {
         }
     }
 
+    public CategoriaResponseDTO retornaCategoriaPorDescricao(String descricao) {
+        Categoria categoria = categoriaRepository.findByDescricao(descricao);
+        if ( categoria != null){
+            return criarCategoriaResponseDTO(categoria);
+        }else{
+            throw new RuntimeException("Categoria não existe");
+        }
+    }
+
     public Categoria createCategoria(CreateCategoriaRequestDTO createCategoriaRequestDTO) {
         Categoria novaCategoria = new Categoria();
         novaCategoria.setDescricao(createCategoriaRequestDTO.descricao());
