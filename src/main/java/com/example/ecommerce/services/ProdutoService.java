@@ -51,6 +51,12 @@ public class ProdutoService {
         return criarProdutoResponseDTo(novoProduto);
     }
 
+    public void decrementaQuantidade(int qtd, int id) {
+        Produto produto = this.produtoRepository.findById(id);
+        produto.setQuantidade(produto.getQuantidade() - qtd);
+        produtoRepository.save(produto);
+    }
+
     public ProdutoResponseDTO atualizaProduto(int id, ProdutoRequestDTO edited) {
         Produto existingProduto = this.produtoRepository.findById(id);
         if(existingProduto == null) throw  new RuntimeException("Produto não encontrado");
