@@ -3,15 +3,15 @@ package com.example.ecommerce.controllers;
 import com.example.ecommerce.domain.produto.Produto;
 import com.example.ecommerce.domain.usuario.Usuario;
 import com.example.ecommerce.domain.venda.Venda;
+import com.example.ecommerce.dto.produto.ProdutoResponseDTO;
 import com.example.ecommerce.dto.venda.ProdutosVendidosDTO;
+import com.example.ecommerce.dto.venda.VendaResponseDTO;
 import com.example.ecommerce.repository.VendaRepository;
 import com.example.ecommerce.services.ProdutoService;
 import com.example.ecommerce.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -29,6 +29,11 @@ public class VendaController {
     private final ProdutoService produtoService;
 
 
+    @GetMapping
+    public ResponseEntity<List<VendaResponseDTO>> getVendas(){
+        List<VendaResponseDTO> vendas = vendaRepository.findAll().stream().map(VendaResponseDTO::new).toList();
+        return ResponseEntity.ok().body(vendas);
+    }
 
     @PostMapping
     public void criaVenda(@RequestBody ProdutosVendidosDTO produtosVendidosDTO){
