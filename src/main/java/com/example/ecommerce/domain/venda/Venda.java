@@ -27,4 +27,8 @@ public class Venda {
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
+
+    public Venda(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

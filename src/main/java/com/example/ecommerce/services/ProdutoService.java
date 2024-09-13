@@ -45,6 +45,13 @@ public class ProdutoService {
         return criarProdutoResponseDTo(produto);
     }
 
+    public void decrementaQuantidade(int qtd, int id) {
+        Produto produto = this.produtoRepository.findById(id);
+        produto.setQuantidade(produto.getQuantidade() - qtd);
+        produtoRepository.save(produto);
+    }
+
+
     public ProdutoResponseDTO retornaProduto(int id){
         Produto novoProduto = this.produtoRepository.findById(id);
 
