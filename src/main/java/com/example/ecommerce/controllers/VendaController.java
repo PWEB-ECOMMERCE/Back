@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +51,7 @@ public class VendaController {
     public void novaVenda(@RequestBody VendaRequestDTO vendaRequestDTO) {
         Usuario usuario = usuarioService.getUsuarioByID(vendaRequestDTO.userId());
         Venda novaVenda = new Venda();
-        novaVenda.setData_hora(Timestamp.from(Instant.now()));
+        novaVenda.setData_hora(LocalDate.now());
         novaVenda.setUsuario(usuario);
 
         Venda venda = vendaRepository.save(novaVenda);

@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Table(name = "venda")
 @Entity(name = "venda")
@@ -22,7 +24,7 @@ public class Venda {
     private Integer id;
 
     @Column(nullable = false)
-    private Timestamp data_hora;
+    private LocalDate data_hora;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", nullable = false)
