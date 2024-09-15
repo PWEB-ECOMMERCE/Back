@@ -1,5 +1,6 @@
 package com.example.ecommerce.controllers;
 
+import com.example.ecommerce.domain.produto.Produto;
 import com.example.ecommerce.domain.usuario.Usuario;
 import com.example.ecommerce.domain.venda.ComprasInterface;
 import com.example.ecommerce.domain.venda.Venda;
@@ -7,6 +8,7 @@ import com.example.ecommerce.domain.venda.VendasDiaInterface;
 import com.example.ecommerce.domain.venda_produto.VendaProduto;
 import com.example.ecommerce.dto.produto.ProdutoResponseDTO;
 import com.example.ecommerce.dto.relatorio.RelatorioComprasResponseDTO;
+import com.example.ecommerce.dto.relatorio.VendasPorTempoDTO;
 import com.example.ecommerce.repository.ProdutoRepository;
 import com.example.ecommerce.repository.VendaProdutoRepository;
 import com.example.ecommerce.repository.VendaRepository;
@@ -67,7 +69,7 @@ public class RelatorioController {
     }
 
     @GetMapping("/totalValorDia")
-    public void totalValorPorDia() {
+    public ResponseEntity<List<VendasPorTempoDTO>> totalValorPorDia() {
         List<VendaProduto> vendaProdutoList = vendaProdutoRepository.findAll();
 
         List<AtomicInteger> valoresTotals = new ArrayList<>();
@@ -76,16 +78,32 @@ public class RelatorioController {
         String data_fim = "2024-09-14 17:12:34.664409";
         Timestamp startTime = Timestamp.valueOf(data_hora);
         Timestamp endTime = Timestamp.valueOf(data_fim);
-        LocalDate data = LocalDate.parse("2024-09-14");
+        LocalDate data = LocalDate.parse("2024-09-11");
         LocalDate endData = LocalDate.parse("2024-09-14");
 
 
         List<String> vendas = vendaRepository.findByData_hora(data);
         List<VendasDiaInterface> vendasDia = vendaRepository.findVendasPeriodoTempo(data, endData);
+        List<VendasPorTempoDTO> vendasPorTempoDTOList = new ArrayList<>();
 
         vendasDia.forEach(venda -> {
-            System.out.println(venda.getQuantidade() + " " + venda.getProduto_id());
+            Produto produto = produtoRepository.findById(venda.getProduto_id());
+            System.out.println("compra: " + venda.getId() + "com " + venda.getQuantidade() + " produtos por: R$ " + produto.getPreco() + " total: " + venda.getQuantidade() * produto.getPreco());
+            valorTotal.addAndGet(produto.getPreco() * venda.getQuantidade());
         });
 
+        for ( int i = 1; i < vendasDia.size(); i++) {
+            Produto produto = produtoRepository.findById(vendasDia.get(i).getProduto_id());
+            valorTotal.set(0);
+            valorTotal.getAndAdd(vendasDia.get(i).getQuantidade() * produto.getPreco());
+            int valor = vendasDia.get(i).getQuantidade() * produto.getPreco();
+            //valoresTotals.add(valorTotal);
+            System.out.println(valorTotal);
+            VendasPorTempoDTO vendasPorTempoDTO = new VendasPorTempoDTO(vendasDia.get(i).getData_hora(), valor);
+            vendasPorTempoDTOList.add(vendasPorTempoDTO);
+
+        }
+
+        return ResponseEntity.ok().body(vendasPorTempoDTOList);
     }
 }

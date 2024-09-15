@@ -35,6 +35,6 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
     @Query(value = "SELECT data_hora FROM venda GROUP BY data_hora", nativeQuery = true)
     List<String> findByData_hora(LocalDate data);
 
-    @Query(value = "select venda.*, venda_produto.produto_id, venda_produto.quantidade from venda inner join venda_produto on venda.id = venda_produto.venda_id where data_hora <= ? AND data_hora  >= ?", nativeQuery = true)
+    @Query(value = "select venda.*, venda_produto.produto_id, venda_produto.quantidade from venda inner join venda_produto on venda.id = venda_produto.venda_id where data_hora >= ? AND data_hora  <= ?", nativeQuery = true)
     List<VendasDiaInterface> findVendasPeriodoTempo(LocalDate data, LocalDate endData);
 }
