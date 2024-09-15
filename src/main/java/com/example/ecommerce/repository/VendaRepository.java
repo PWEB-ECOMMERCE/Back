@@ -21,8 +21,8 @@ public interface VendaRepository extends JpaRepository<Venda, Integer> {
 
      */
 
-    @Query(value = "SELECT usuario_id, COUNT(usuario_id) AS num FROM venda GROUP BY usuario_id ORDER BY num DESC", nativeQuery = true)
-    List<ComprasInterface> finda();
+    @Query(value = "SELECT usuario_id, COUNT(usuario_id) AS num FROM venda WHERE data_hora >= ? AND data_hora  <= ? GROUP BY usuario_id ORDER BY num DESC ", nativeQuery = true)
+    List<ComprasInterface> finda(LocalDate data, LocalDate endData);
 
     /*
     @Query(value = "SELECT * FROM venda WHERE " +

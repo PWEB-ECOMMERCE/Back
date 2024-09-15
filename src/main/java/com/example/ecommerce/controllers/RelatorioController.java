@@ -41,8 +41,11 @@ public class RelatorioController {
     @GetMapping("/compras")
     public ResponseEntity<List<RelatorioComprasResponseDTO>> comprasClientes(){
 
-        List<ComprasInterface> vendas = vendaRepository.finda().stream().toList();
+
         List<RelatorioComprasResponseDTO> relatorioComprasResponseDTOS = new ArrayList<>();
+        LocalDate data = LocalDate.parse("2024-09-11");
+        LocalDate endData = LocalDate.parse("2024-09-14");
+        List<ComprasInterface> vendas = vendaRepository.finda(data, endData).stream().toList();
 
         for(int i = 0; i < vendas.size(); i++) {
             Usuario usuario = usuarioService.getUsuarioByID(vendas.get(i).getUsuario_id());
@@ -74,10 +77,7 @@ public class RelatorioController {
 
         List<AtomicInteger> valoresTotals = new ArrayList<>();
         AtomicInteger valorTotal = new AtomicInteger();
-        String data_hora = "2024-09-13 11:11:01.59812";
-        String data_fim = "2024-09-14 17:12:34.664409";
-        Timestamp startTime = Timestamp.valueOf(data_hora);
-        Timestamp endTime = Timestamp.valueOf(data_fim);
+
         LocalDate data = LocalDate.parse("2024-09-11");
         LocalDate endData = LocalDate.parse("2024-09-14");
 
