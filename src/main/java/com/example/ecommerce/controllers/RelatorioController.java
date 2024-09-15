@@ -3,6 +3,7 @@ package com.example.ecommerce.controllers;
 import com.example.ecommerce.domain.usuario.Usuario;
 import com.example.ecommerce.domain.venda.ComprasInterface;
 import com.example.ecommerce.domain.venda.Venda;
+import com.example.ecommerce.domain.venda.VendasDiaInterface;
 import com.example.ecommerce.domain.venda_produto.VendaProduto;
 import com.example.ecommerce.dto.produto.ProdutoResponseDTO;
 import com.example.ecommerce.dto.relatorio.RelatorioComprasResponseDTO;
@@ -76,11 +77,15 @@ public class RelatorioController {
         Timestamp startTime = Timestamp.valueOf(data_hora);
         Timestamp endTime = Timestamp.valueOf(data_fim);
         LocalDate data = LocalDate.parse("2024-09-14");
+        LocalDate endData = LocalDate.parse("2024-09-14");
 
 
         List<String> vendas = vendaRepository.findByData_hora(data);
+        List<VendasDiaInterface> vendasDia = vendaRepository.findVendasPeriodoTempo(data, endData);
 
-        System.out.println(vendas);
+        vendasDia.forEach(venda -> {
+            System.out.println(venda.getQuantidade() + " " + venda.getProduto_id());
+        });
 
     }
 }
