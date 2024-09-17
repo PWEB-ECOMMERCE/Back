@@ -14,10 +14,9 @@ import com.example.ecommerce.repository.VendaProdutoRepository;
 import com.example.ecommerce.repository.VendaRepository;
 import com.example.ecommerce.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
 import java.time.Instant;
@@ -39,12 +38,11 @@ public class RelatorioController {
     private final UsuarioService usuarioService;
 
     @GetMapping("/compras")
-    public ResponseEntity<List<RelatorioComprasResponseDTO>> comprasClientes(){
+    public ResponseEntity<List<RelatorioComprasResponseDTO>> comprasClientes(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+                                                                             @RequestParam("endData") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endData){
 
 
         List<RelatorioComprasResponseDTO> relatorioComprasResponseDTOS = new ArrayList<>();
-        LocalDate data = LocalDate.parse("2024-09-11");
-        LocalDate endData = LocalDate.parse("2024-09-14");
         List<ComprasInterface> vendas = vendaRepository.finda(data, endData).stream().toList();
 
         for(int i = 0; i < vendas.size(); i++) {
@@ -55,9 +53,6 @@ public class RelatorioController {
                     Integer.parseInt(vendas.get(i).getNum()));
             relatorioComprasResponseDTOS.add(relatorioComprasResponseDTO);
         }
-        Timestamp ts = Timestamp.valueOf("2016-03-12 20:45:00");
-        System.out.println(ts);
-
 
         return ResponseEntity.ok().body(relatorioComprasResponseDTOS);
     }
@@ -72,14 +67,17 @@ public class RelatorioController {
     }
 
     @GetMapping("/totalValorDia")
-    public ResponseEntity<List<VendasPorTempoDTO>> totalValorPorDia() {
+    public ResponseEntity<List<VendasPorTempoDTO>> totalValorPorDia(@RequestParam("data") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate data,
+                                                                    @RequestParam("endData") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endData) {
+
+
         List<VendaProduto> vendaProdutoList = vendaProdutoRepository.findAll();
 
         List<AtomicInteger> valoresTotals = new ArrayList<>();
         AtomicInteger valorTotal = new AtomicInteger();
 
-        LocalDate data = LocalDate.parse("2024-09-11");
-        LocalDate endData = LocalDate.parse("2024-09-14");
+        //LocalDate data = LocalDate.parse("2024-09-11");
+        //LocalDate endData = LocalDate.parse("2024-09-14");
 
 
         List<String> vendas = vendaRepository.findByData_hora(data);
