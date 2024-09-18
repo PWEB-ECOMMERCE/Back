@@ -90,13 +90,11 @@ public class RelatorioController {
             valorTotal.addAndGet(produto.getPreco() * venda.getQuantidade());
         });
 
-        for ( int i = 1; i < vendasDia.size(); i++) {
+        for ( int i = 0; i < vendasDia.size(); i++) {
             Produto produto = produtoRepository.findById(vendasDia.get(i).getProduto_id());
             valorTotal.set(0);
             valorTotal.getAndAdd(vendasDia.get(i).getQuantidade() * produto.getPreco());
             int valor = vendasDia.get(i).getQuantidade() * produto.getPreco();
-            //valoresTotals.add(valorTotal);
-            System.out.println(valorTotal);
             VendasPorTempoDTO vendasPorTempoDTO = new VendasPorTempoDTO(vendasDia.get(i).getData_hora(), valor);
             vendasPorTempoDTOList.add(vendasPorTempoDTO);
 
