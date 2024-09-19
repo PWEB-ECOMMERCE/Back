@@ -76,14 +76,15 @@ public class RelatorioController {
         List<AtomicInteger> valoresTotals = new ArrayList<>();
         AtomicInteger valorTotal = new AtomicInteger();
 
-        //LocalDate data = LocalDate.parse("2024-09-11");
-        //LocalDate endData = LocalDate.parse("2024-09-14");
-
-
         List<String> vendas = vendaRepository.findByData_hora(data);
         List<VendasDiaInterface> vendasDia = vendaRepository.findVendasPeriodoTempo(data, endData);
         List<VendasPorTempoDTO> vendasPorTempoDTOList = new ArrayList<>();
 
+        vendasDia.forEach(venda -> {
+            VendasPorTempoDTO vendasPorTempoDTO = new VendasPorTempoDTO(venda.getData_hora(), venda.getValor_total());
+            vendasPorTempoDTOList.add(vendasPorTempoDTO);
+        });
+        /*
         vendasDia.forEach(venda -> {
             Produto produto = produtoRepository.findById(venda.getProduto_id());
             System.out.println("compra: " + venda.getId() + "com " + venda.getQuantidade() + " produtos por: R$ " + produto.getPreco() + " total: " + venda.getQuantidade() * produto.getPreco());
@@ -100,6 +101,10 @@ public class RelatorioController {
 
         }
 
+
+         */
+
         return ResponseEntity.ok().body(vendasPorTempoDTOList);
     }
+
 }
