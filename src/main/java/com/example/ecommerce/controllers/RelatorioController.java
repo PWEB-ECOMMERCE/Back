@@ -18,15 +18,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @RestController
@@ -84,25 +79,7 @@ public class RelatorioController {
             VendasPorTempoDTO vendasPorTempoDTO = new VendasPorTempoDTO(venda.getData_hora(), venda.getValor_total());
             vendasPorTempoDTOList.add(vendasPorTempoDTO);
         });
-        /*
-        vendasDia.forEach(venda -> {
-            Produto produto = produtoRepository.findById(venda.getProduto_id());
-            System.out.println("compra: " + venda.getId() + "com " + venda.getQuantidade() + " produtos por: R$ " + produto.getPreco() + " total: " + venda.getQuantidade() * produto.getPreco());
-            valorTotal.addAndGet(produto.getPreco() * venda.getQuantidade());
-        });
 
-        for ( int i = 0; i < vendasDia.size(); i++) {
-            Produto produto = produtoRepository.findById(vendasDia.get(i).getProduto_id());
-            valorTotal.set(0);
-            valorTotal.getAndAdd(vendasDia.get(i).getQuantidade() * produto.getPreco());
-            int valor = vendasDia.get(i).getQuantidade() * produto.getPreco();
-            VendasPorTempoDTO vendasPorTempoDTO = new VendasPorTempoDTO(vendasDia.get(i).getData_hora(), valor);
-            vendasPorTempoDTOList.add(vendasPorTempoDTO);
-
-        }
-
-
-         */
 
         return ResponseEntity.ok().body(vendasPorTempoDTOList);
     }
