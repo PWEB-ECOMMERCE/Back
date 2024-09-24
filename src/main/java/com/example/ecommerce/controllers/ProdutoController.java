@@ -36,6 +36,12 @@ public class ProdutoController {
 
         return ResponseEntity.ok().body(produtoResponseDTO);
     }
+    @GetMapping("/cat/{categoryID}")
+    public ResponseEntity<List<ProdutoResponseDTO>> getProdutoByDescription(@PathVariable int categoryID){
+        List<ProdutoResponseDTO> produtos = produtoService.retornaProdutoPelaCategoria(categoryID);
+
+        return ResponseEntity.ok().body(produtos);
+    }
 
     @PostMapping
     public ResponseEntity<ProdutoResponseDTO> createProduct(@RequestBody ProdutoRequestDTO produtoRequestDTO, UriComponentsBuilder uriComponentsBuilder){
