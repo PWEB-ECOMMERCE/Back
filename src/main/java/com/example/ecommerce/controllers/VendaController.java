@@ -48,7 +48,7 @@ public class VendaController {
     }
 
     @PostMapping
-    public void novaVenda(@RequestBody VendaRequestDTO vendaRequestDTO) {
+    public ResponseEntity novaVenda(@RequestBody VendaRequestDTO vendaRequestDTO) {
         Usuario usuario = usuarioService.getUsuarioByID(vendaRequestDTO.userId());
         Venda novaVenda = new Venda();
         novaVenda.setData_hora(LocalDate.now());
@@ -58,24 +58,29 @@ public class VendaController {
 
         for (int i = 0; i < vendaRequestDTO.itensCarrinho().size(); i++) {
             ProdutoResponseDTO produto = produtoService.retornaProduto(vendaRequestDTO.itensCarrinho().get(i).id());
-            Produto novoProduto = new Produto();
-            novoProduto.setId(produto.id());
-            novoProduto.setQuantidade(produto.quantidade());
-            novoProduto.setDescricao(produto.descricao());
-            novoProduto.setImagemUrl(produto.foto());
-            novoProduto.setPreco(produto.preco());
-            novoProduto.setCategoria(produto.categoria());
-            novoProduto.setNome(produto.nome());
+            if ( produto.quantidade() > 0) {
+                Produto novoProduto = new Produto();
+                novoProduto.setId(produto.id());
+                novoProduto.setQuantidade(produto.quantidade());
+                novoProduto.setDescricao(produto.descricao());
+                novoProduto.setImagemUrl(produto.foto());
+                novoProduto.setPreco(produto.preco());
+                novoProduto.setCategoria(produto.categoria());
+                novoProduto.setNome(produto.nome());
 
-            VendaProduto vendaProduto = new VendaProduto();
-            vendaProduto.setVenda(venda);
-            vendaProduto.setProduto(novoProduto);
-            vendaProduto.setQuantidade(vendaRequestDTO.itensCarrinho().get(i).qtd());
+                VendaProduto vendaProduto = new VendaProduto();
+                vendaProduto.setVenda(venda);
+                vendaProduto.setProduto(novoProduto);
+                vendaProduto.setQuantidade(vendaRequestDTO.itensCarrinho().get(i).qtd());
 
-            vendaProdutoRepository.save(vendaProduto);
+                vendaProdutoRepository.save(vendaProduto);
 
-            produtoService.decrementaQuantidade(vendaProduto.getQuantidade(), novoProduto.getId());
+                produtoService.decrementaQuantidade(vendaProduto.getQuantidade(), novoProduto.getId());
+
+            }else return ResponseEntity.status(410).build();
+
         }
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{idVenda}")
