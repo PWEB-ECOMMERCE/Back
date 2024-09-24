@@ -76,7 +76,7 @@ public class ProdutoService {
         if (edited.foto() != null) {
             existingProduto.setImagemUrl(edited.foto());
         }
-        if (edited.quantidade() <= 0) {
+        if (edited.quantidade() >= 0) {
             existingProduto.setQuantidade(edited.quantidade());
         }
         if (edited.categoria() != null) {
