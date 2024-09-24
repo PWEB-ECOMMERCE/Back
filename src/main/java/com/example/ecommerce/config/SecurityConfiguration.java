@@ -34,9 +34,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "auth/login", "auth/register").permitAll()
                         .requestMatchers((HttpMethod.POST), "produto", "categoria").hasRole("ADMIN")
-                        .requestMatchers((HttpMethod.PATCH), "produto", "categoria").hasRole("ADMIN")
-                        .requestMatchers((HttpMethod.DELETE), "produto", "categoria").hasRole("ADMIN")
-                        .requestMatchers("/produto","/produto/cat/*", "/usuarios", "categoria", "venda", "/venda/*","/venda/esp/*", "relatorio", "relatorio/*").permitAll()
+                        .requestMatchers((HttpMethod.PATCH), "produto", "categoria", "venda").hasRole("ADMIN")
+                        .requestMatchers((HttpMethod.DELETE), "produto", "categoria", "venda").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "relatorio/*", "venda").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/venda").hasRole("USER")
+                        .requestMatchers("/produto","/produto/cat/*", "/usuarios", "categoria").permitAll()
                         .anyRequest().authenticated()
                 )
                 .securityContext((securityContext) -> securityContext
