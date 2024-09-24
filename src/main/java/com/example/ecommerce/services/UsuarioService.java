@@ -73,7 +73,7 @@ public class UsuarioService {
         return new UsuarioResponseDTO(usuario.getId(), usuario.getNome(), usuario.getEndereco(), usuario.getEmail(), usuario.getLogin(), usuario.isAdministrador(), usuario.getRole());
     }
 
-    private Usuario getUsuarioByID(String usuarioID){
+    public Usuario getUsuarioByID(String usuarioID){
         Optional<Usuario> fetchedUsuario = this.usuarioRepository.findById(usuarioID);
 
         //Todo: criar classe de exceção para UserNotFoundException

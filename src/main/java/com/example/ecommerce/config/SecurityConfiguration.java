@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers((HttpMethod.POST), "produto", "categoria").hasRole("ADMIN")
                         .requestMatchers((HttpMethod.PATCH), "produto", "categoria").hasRole("ADMIN")
                         .requestMatchers((HttpMethod.DELETE), "produto", "categoria").hasRole("ADMIN")
-                        .requestMatchers("/produto", "/usuarios", "categoria").permitAll()
+                        .requestMatchers("/produto","/produto/cat/*", "/usuarios", "categoria", "venda", "/venda/*","/venda/esp/*", "relatorio", "relatorio/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .securityContext((securityContext) -> securityContext

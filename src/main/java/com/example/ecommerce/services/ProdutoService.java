@@ -5,10 +5,13 @@ import com.example.ecommerce.domain.produto.Produto;
 import com.example.ecommerce.dto.produto.ProdutoRequestDTO;
 import com.example.ecommerce.dto.produto.ProdutoResponseDTO;
 import com.example.ecommerce.repository.ProdutoRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,10 +48,26 @@ public class ProdutoService {
         return criarProdutoResponseDTo(produto);
     }
 
+    public void decrementaQuantidade(int qtd, int id) {
+        Produto produto = this.produtoRepository.findById(id);
+        produto.setQuantidade(produto.getQuantidade() - qtd);
+        produtoRepository.save(produto);
+    }
+
+
     public ProdutoResponseDTO retornaProduto(int id){
         Produto novoProduto = this.produtoRepository.findById(id);
 
         return criarProdutoResponseDTo(novoProduto);
+    }
+
+    public List<ProdutoResponseDTO> retornaProdutoPelaCategoria(int id){
+        List<Produto> novoProduto = this.produtoRepository.findByCategoryId(id);
+        List<ProdutoResponseDTO> produtos = novoProduto.stream()
+          .map(this::criarProdutoResponseDTo)  // Method reference for transformation
+          .collect(Collectors.toList());
+
+        return produtos;
     }
 
     public ProdutoResponseDTO atualizaProduto(int id, ProdutoRequestDTO edited) {
@@ -69,7 +88,7 @@ public class ProdutoService {
         if (edited.foto() != null) {
             existingProduto.setImagemUrl(edited.foto());
         }
-        if (edited.quantidade() != 0) {
+        if (edited.quantidade() >= 0) {
             existingProduto.setQuantidade(edited.quantidade());
         }
         if (edited.categoria() != null) {

@@ -1,0 +1,1 @@
+ALTER TABLE venda ALTER COLUMN data_hora TYPE DATE;
